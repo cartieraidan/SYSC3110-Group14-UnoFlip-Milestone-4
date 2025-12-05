@@ -81,7 +81,8 @@ public class Controller implements MouseListener, MouseMotionListener, ActionLis
             Snapshot prev = undoStack.pop();
             gameManager = prev.getGameManagerCopy();
             gameManager.setView(view); //reattach GUI
-            gameManager.displayHand(); //update GUI
+            gameManager.updateAll(); //update GUI
+            //gameManager.displayHand(); //update GUI
 
             this.updateStackButtons(); //updates view of buttons
 
@@ -100,7 +101,8 @@ public class Controller implements MouseListener, MouseMotionListener, ActionLis
             Snapshot prev = redoStack.pop();
             gameManager = prev.getGameManagerCopy();
             gameManager.setView(view); //reattach GUI
-            gameManager.displayHand(); //update GUI
+            gameManager.updateAll(); //update GUI
+            //gameManager.displayHand(); //update GUI
 
             this.updateStackButtons(); //updates view of buttons
 
@@ -137,7 +139,8 @@ public class Controller implements MouseListener, MouseMotionListener, ActionLis
             Snapshot snap = (Snapshot) in.readObject();
             gameManager = snap.getGameManagerCopy();
             gameManager.setView(view); //reattach GUI
-            gameManager.displayHand(); //update GUI
+            gameManager.updateAll(); //update GUI
+            //gameManager.displayHand(); //update GUI
 
             //clear stacks after loading
             undoStack.clear();
@@ -280,14 +283,17 @@ public class Controller implements MouseListener, MouseMotionListener, ActionLis
                 // Draw one card
                 gameManager.drawCard();
                 gameManager.setButtonBool(false); //disable draw for user after draw card
+                gameManager.setGameState(GameState.HANDLE_AFTER_DRAW); //saving game snapshot
                 gameManager.handleAfterDraw(); //continues game logic after draw card
 
             }
 
         } else if (button.getText().equals("Undo")) { //User presses undo button
+            System.out.println("undo called");
             this.undo();
 
         } else if (button.getText().equals("Redo")) { //User press redo button
+            System.out.println("redo called");
             this.redo();
 
         }

@@ -82,7 +82,7 @@ public class GameManager implements Serializable {
      * Logic for sequence 2, player start of turn, what can they do?
      */
     public void handleInitialHand() {
-        setGameState(GameState.HANDLE_INITIAL_HAND); //saving game snapshot
+        //setGameState(GameState.HANDLE_INITIAL_HAND); //saving game snapshot
 
         Player player = getCurrentPlayer();
 
@@ -95,6 +95,7 @@ public class GameManager implements Serializable {
         } else if (!canPlay() && player instanceof AiPlayer) { //AI player must draw
             //got to seq 5 for AI
             drawCard();
+            setGameState(GameState.HANDLE_AFTER_DRAW); //saving game snapshot
             handleAfterDraw();
 
         } else if (!canPlay() && !(player instanceof AiPlayer)) { //player can't play
@@ -126,7 +127,7 @@ public class GameManager implements Serializable {
      * Logic for sequence 5, drawing a card then what?
      */
     public void handleAfterDraw() {
-        setGameState(GameState.HANDLE_AFTER_DRAW); //saving game snapshot
+        //setGameState(GameState.HANDLE_AFTER_DRAW); //saving game snapshot
 
         displayHand(); //updates player UI hand
         Player player = getCurrentPlayer();
@@ -167,6 +168,7 @@ public class GameManager implements Serializable {
         }
 
         GameManager copy = new GameManager(playersCopy);
+        copy.setListener(this.stateListener); //setting the copy listener to the controller
 
         //copy the deck manually as deck is final
         copy.deck.newDeck(); //reset deck first
@@ -256,6 +258,7 @@ public class GameManager implements Serializable {
 
         updateAll();
 
+        setGameState(GameState.HANDLE_INITIAL_HAND); //saving game snapshot
         handleInitialHand(); //for start of players hand
     }
 
@@ -601,6 +604,7 @@ public class GameManager implements Serializable {
 
                 System.out.println("AI drew colour");
 
+                setGameState(GameState.HANDLE_AFTER_DRAW); //saving game snapshot
                 handleAfterDraw(); //continue game logic
 
             }
@@ -671,6 +675,7 @@ public class GameManager implements Serializable {
         drawCard = false;
 
         updateAll();
+        setGameState(GameState.HANDLE_INITIAL_HAND); //saving game snapshot
         handleInitialHand(); //going back to seq 2
 
     }
@@ -836,7 +841,7 @@ public class GameManager implements Serializable {
     /**
      * Used to update discard pile, player name and score, player cards in UI.
      */
-    private void updateAll() {
+    public void updateAll() {
         updateDiscardPile(); //for UI
         updateCurrentPlayer(); //for UI
         displayHand(); //display new player cards
