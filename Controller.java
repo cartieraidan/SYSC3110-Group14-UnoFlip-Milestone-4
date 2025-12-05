@@ -60,6 +60,17 @@ public class Controller implements MouseListener, MouseMotionListener, ActionLis
     }
 
     /**
+     * Method used to verify the undo state about to pop is not the current one.
+     *
+     * @param snapshot Current state about to pop from undo state.
+     * @return True is they're the same state.
+     */
+    private Boolean checkState(Snapshot snapshot) {
+        GameManager snapshotCopy = snapshot.getGameManagerCopy();
+        return gameManager.equals(snapshotCopy);
+    }
+
+    /**
      * Push a snapshot to the undo stack. Should be called before any player action that changes the game.
      * Interface implementation for StateListener, called everything state change.
      */
@@ -77,7 +88,14 @@ public class Controller implements MouseListener, MouseMotionListener, ActionLis
      */
     public void undo() {
         if(!undoStack.isEmpty()){
+
+            Boolean sameState = checkState(undoStack.peek()); //check if it is not the current state
             redoStack.push(new Snapshot(gameManager, gameManager.getGameState())); //save current state for redo
+
+            if (sameState) { //if current state, we just pop it from undo and do nothing with it
+                undoStack.pop();
+            }
+
             Snapshot prev = undoStack.pop();
             gameManager = prev.getGameManagerCopy();
             gameManager.setView(view); //reattach GUI

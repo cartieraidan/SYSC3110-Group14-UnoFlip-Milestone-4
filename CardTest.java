@@ -81,4 +81,12 @@ public class CardTest {
         assertEquals("WILD WILD", wild.toString());
     }
 
+    @Test
+    void testEquals() { //testing equals method override
+        Card card1 = new Card(CardColour.RED, CardColour.BROWN, CardType.NUMBER, CardType.NUMBER, 5, 5);
+        Card card2 = new Card(CardColour.RED, CardColour.BROWN, CardType.NUMBER, CardType.NUMBER, 5, 5);
+
+        assertTrue(card1.equals(card2));
+    }
+
 }

@@ -169,6 +169,7 @@ public class GameManager implements Serializable {
 
         GameManager copy = new GameManager(playersCopy);
         copy.setListener(this.stateListener); //setting the copy listener to the controller
+        copy.gameState = this.gameState; //preserve its game state without notify Controller to create another snapshot
 
         //copy the deck manually as deck is final
         copy.deck.newDeck(); //reset deck first
@@ -232,6 +233,37 @@ public class GameManager implements Serializable {
      */
     public void setListener(StateListener stateListener) {
         this.stateListener = stateListener;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+
+        if (other instanceof GameManager otherGm) { //using pattern variable
+
+            //checking current player index
+            if (!(this.currentPlayerIndex == otherGm.getCurrentPlayerIndex())) {
+                return false;
+            }
+
+            //checking current game state
+            if (!(this.gameState == otherGm.gameState)) {
+                return false;
+            }
+
+            //checking players have the same hand
+            for (int i = 0; i < this.getCurrentPlayer().gethand().size(); i++) {
+
+                if (!(this.getCurrentPlayer().gethand().get(i).equals(otherGm.getCurrentPlayer().gethand().get(i)))) {
+                    return false;
+                }
+            }
+
+            //checking discard cards are the same, final check
+            return this.topDiscard().equals(otherGm.topDiscard());
+
+        }
+
+        return false;
     }
 
     /* *************************************************************** */

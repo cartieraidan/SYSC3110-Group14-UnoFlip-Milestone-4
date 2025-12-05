@@ -149,4 +149,22 @@ public class Card implements Serializable {
             return colour + " " + type;
         }
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) { // same instance
+            return true;
+        }
+        if (!(obj instanceof Card)) { //not instance of Card
+            return false;
+        }
+
+        //comparing colour and type
+        if (this.getColour() == ((Card) obj).getColour()) {
+            return this.getType() == ((Card) obj).getType();
+        }
+
+        return false;
+
+    }
 }
