@@ -9,8 +9,8 @@ import java.util.Map;
  * Child of Player which implements more functions imitating a Player.
  * And still use the same methods as Player so don't have to change GameManager too much.
  *
- * @author Aidan Cartier
- * @version November 25, 2025
+ * @author Aidan Cartier, Mark Bowerman
+ * @version December 5, 2025
  */
 public class AiPlayer extends Player implements Serializable {
 

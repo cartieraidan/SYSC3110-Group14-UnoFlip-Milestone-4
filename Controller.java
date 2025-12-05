@@ -1,14 +1,16 @@
 import javax.swing.*;
 import java.awt.event.*;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Stack;
 
 /**
  * The Controller class manages the state and flow of the GUI UNO game.
  * Controller most of the game flow from interactions with the GUI and handle the logic to handle.
  *
  *
- * @author Aidan Cartier
- * @version November 10, 2025
+ * @author Aidan Cartier, Mark Bowerman
+ * @version December 5, 2025
  */
 public class Controller implements MouseListener, MouseMotionListener, ActionListener {
 
@@ -17,6 +19,10 @@ public class Controller implements MouseListener, MouseMotionListener, ActionLis
     private GameManager gameManager;
 
     private boolean gameOver;
+
+    //undo and redo stacks
+    private Stack<Snapshot> undoStack = new Stack<>();
+    private Stack<Snapshot> redoStack = new Stack<>();
 
     /**
      * Constructs a Controller that handles a view and model of UNO
@@ -39,6 +45,83 @@ public class Controller implements MouseListener, MouseMotionListener, ActionLis
         gameOver = false;
 
 
+    }
+
+    /**
+     * Push a snapshot to the undo stack. Should be called before any player action that changes the game.
+     */
+    private void saveSnapshotForUndo(){
+        undoStack.push(new Snapshot(gameManager)); //create copy and add to stack
+        redoStack.clear(); //clear redo when a new move is made
+    }
+
+    /**
+     * Undo a move. Saves the current game state to the redo stack and pops from undo stack. Then reattaches and updates
+     * the GUI.
+     */
+    public void undo(){
+        if(!undoStack.isEmpty()){
+            redoStack.push(new Snapshot(gameManager)); //save current state for redo
+            Snapshot prev = undoStack.pop();
+            gameManager = prev.getGameManagerCopy();
+            gameManager.setView(view); //reattach GUI
+            gameManager.displayHand(); //update GUI
+        }
+        //should probably add an else in case there is nothing to undo
+    }
+
+    /**
+     * Redo a move. Saves the current game state to the undo stack and pops from redo stack. Then reattaches and updates
+     * the GUI.
+     */
+    public void redo(){
+        if(!redoStack.isEmpty()){
+            undoStack.push(new Snapshot(gameManager)); //save current state for undo
+            Snapshot prev = redoStack.pop();
+            gameManager = prev.getGameManagerCopy();
+            gameManager.setView(view); //reattach GUI
+            gameManager.displayHand(); //update GUI
+        }
+        //should probably add an else in case there is nothing to redo
+    }
+
+    /**
+     * Saves the current game state as a snapshot to a file in the saves folder
+     * @param filename the name of the file to be saved
+     */
+    public void saveGame(String filename){
+
+        File saveDir = new File("saves");
+        if(!saveDir.exists()){ //make sure saves folder exists otherwise create it
+            saveDir.mkdir();
+        }
+
+        Snapshot snap = new Snapshot(gameManager);
+        try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("saves/" + filename))){
+            out.writeObject(snap);
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Loads the game state from the chosen file in saves folder
+     * @param filename the name of the file to be loaded from
+     */
+    public void loadGame(String filename){
+        try(ObjectInputStream in = new ObjectInputStream(new FileInputStream("saves/" + filename))){
+            Snapshot snap = (Snapshot) in.readObject();
+            gameManager = snap.getGameManagerCopy();
+            gameManager.setView(view); //reattach GUI
+            gameManager.displayHand(); //update GUI
+
+            //clear stacks after loading
+            undoStack.clear();
+            redoStack.clear();
+
+        } catch (IOException | ClassNotFoundException e){
+            e.printStackTrace();
+        }
     }
 
     /**

@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Cards can be compared to other cards to determine if they can be legally played.
  *
  * @author Mark Bowerman
- * @version 1.0
+ * @version December 5, 2025
  */
 public class Card implements Serializable {
     private CardColour lightColour;

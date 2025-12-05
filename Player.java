@@ -8,7 +8,7 @@ import java.util.List;
  * Players can draw cards, play cards, clear their hand, and calculate the total points of the remaining cards
  *
  * @author Mark Bowerman
- * @version 1.0
+ * @version December 5, 2025
  */
 public class Player implements Serializable {
     private final String name;

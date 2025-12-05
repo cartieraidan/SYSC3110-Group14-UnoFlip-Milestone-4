@@ -10,8 +10,8 @@ import java.util.List;
  * The GameManager class manages the state and flow of the UI-based UNO game.
  * Implemented to support up to 0 AI players.
  *
- * @author Aidan Cartier
- * @version November 29, 2025
+ * @author Aidan Cartier, Mark Bowerman
+ * @version December 5, 2025
  */
 public class GameManager implements Serializable {
     private final List<Player> players;

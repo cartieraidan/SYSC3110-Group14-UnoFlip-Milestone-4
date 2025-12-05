@@ -1,8 +1,9 @@
 import java.io.Serializable;
 
 /**
- * Class made for taking snapshot of current game state then adding into a stack for undo and redo options.
- * And saving and loading games.
+ * Class made for taking snapshot of current game state.
+ * @author Mark Bowerman
+ * @version December 5, 2025
  */
 public class Snapshot implements Serializable {
     /* Add all objects needed for game snapshot
@@ -33,4 +34,21 @@ public class Snapshot implements Serializable {
 
      */
 
+    private final GameManager gameManagerCopy;
+
+    /**
+     * Creates a deep copy of the games state and stores it in the Snapshot.
+     * @param gm the game manager to store
+     */
+    public Snapshot(GameManager gm){
+        this.gameManagerCopy =gm.deepCopy();
+    }
+
+    /**
+     * Returns the GameManager stored in the current Snapshot.
+     * @return the game manager from this snapshot
+     */
+    public GameManager getGameManagerCopy(){
+        return gameManagerCopy;
+    }
 }

@@ -1,5 +1,4 @@
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
@@ -8,8 +7,8 @@ import java.util.Stack;
  * Class represents a standard UNO deck used in the game.
  * It manages card creation, shuffling, drawing and general deck operations.
  *
- * @author Joshua Heinze
- * @version 1.0
+ * @author Joshua Heinze, Mark Bowerman
+ * @version December 5, 2025
  */
 public class Deck implements Serializable {
     private final Stack<Card> cards;
