@@ -41,8 +41,8 @@ public class Controller implements MouseListener, MouseMotionListener, ActionLis
         gameManager.initialPlayers();
         view.subscribe(gameManager);
 
-        gameManager.setGameState(GameState.NEW_ROUND); //saving initial game snapshot
         gameManager.startGame();
+        gameManager.setGameState(GameState.HANDLE_INITIAL_HAND); //saving initial game snapshot
 
         view.setVisible(true);
 
@@ -86,6 +86,7 @@ public class Controller implements MouseListener, MouseMotionListener, ActionLis
 
             this.updateStackButtons(); //updates view of buttons
 
+            System.out.println("(undo)current player: " + gameManager.getCurrentPlayer().getName());
             prev.executeState(); //executes game logic
         }
         //should probably add an else in case there is nothing to undo
@@ -106,6 +107,7 @@ public class Controller implements MouseListener, MouseMotionListener, ActionLis
 
             this.updateStackButtons(); //updates view of buttons
 
+            System.out.println("(redo)current player: " + gameManager.getCurrentPlayer().getName());
             prev.executeState(); //executes game logic
         }
         //should probably add an else in case there is nothing to redo

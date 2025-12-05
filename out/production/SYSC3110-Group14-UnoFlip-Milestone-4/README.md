@@ -41,7 +41,10 @@ Lawrence Chen
 
 
 Aidan Cartier
-- Implemented all Uno flip operations
+- Implemented StateListener, GameState.
+- Implemented logic for saving snapshots in gameManager and how to execute when reloading a snapshot.
+- Implemented all GUI functionality for undo and redo buttons.
+- Fixed bugs surrounding the undo and redo implementations.
 
 Roadmap:
 - Milestone 1 - Oct 27 - Text-based playable Uno game
