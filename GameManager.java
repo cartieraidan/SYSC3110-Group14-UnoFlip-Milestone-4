@@ -210,6 +210,7 @@ public class GameManager implements Serializable {
      */
     public void setGameState(GameState state) {
         this.gameState = state;
+        System.out.println("Saving current game state: " + state);
         stateListener.saveSnapshotForUndo(state); //calls to save a snapshot
     }
 

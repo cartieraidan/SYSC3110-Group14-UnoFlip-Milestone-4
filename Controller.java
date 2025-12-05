@@ -52,6 +52,14 @@ public class Controller implements MouseListener, MouseMotionListener, ActionLis
     }
 
     /**
+     * For enabling and disabling the undo and redo buttons for when the user can use them.
+     */
+    private void updateStackButtons() {
+        view.updateRedoButton(!redoStack.isEmpty());
+        view.updateUndoButton(!undoStack.isEmpty());
+    }
+
+    /**
      * Push a snapshot to the undo stack. Should be called before any player action that changes the game.
      * Interface implementation for StateListener, called everything state change.
      */
@@ -59,19 +67,23 @@ public class Controller implements MouseListener, MouseMotionListener, ActionLis
     public void saveSnapshotForUndo(GameState state) {
         undoStack.push(new Snapshot(gameManager, state)); //create copy and add to stack
         redoStack.clear(); //clear redo when a new move is made
+
+        this.updateStackButtons(); //updates view of buttons
     }
 
     /**
      * Undo a move. Saves the current game state to the redo stack and pops from undo stack. Then reattaches and updates
      * the GUI.
      */
-    public void undo(){
+    public void undo() {
         if(!undoStack.isEmpty()){
             redoStack.push(new Snapshot(gameManager, gameManager.getGameState())); //save current state for redo
             Snapshot prev = undoStack.pop();
             gameManager = prev.getGameManagerCopy();
             gameManager.setView(view); //reattach GUI
             gameManager.displayHand(); //update GUI
+
+            this.updateStackButtons(); //updates view of buttons
 
             prev.executeState(); //executes game logic
         }
@@ -82,13 +94,15 @@ public class Controller implements MouseListener, MouseMotionListener, ActionLis
      * Redo a move. Saves the current game state to the undo stack and pops from redo stack. Then reattaches and updates
      * the GUI.
      */
-    public void redo(){
+    public void redo() {
         if(!redoStack.isEmpty()){
             undoStack.push(new Snapshot(gameManager, gameManager.getGameState())); //save current state for undo
             Snapshot prev = redoStack.pop();
             gameManager = prev.getGameManagerCopy();
             gameManager.setView(view); //reattach GUI
             gameManager.displayHand(); //update GUI
+
+            this.updateStackButtons(); //updates view of buttons
 
             prev.executeState(); //executes game logic
         }
@@ -128,6 +142,8 @@ public class Controller implements MouseListener, MouseMotionListener, ActionLis
             //clear stacks after loading
             undoStack.clear();
             redoStack.clear();
+
+            this.updateStackButtons(); //updates view of buttons, might or might not need this....
 
             snap.executeState(); //executes game logic
 
@@ -268,7 +284,11 @@ public class Controller implements MouseListener, MouseMotionListener, ActionLis
 
             }
 
+        } else if (button.getText().equals("Undo")) { //User presses undo button
+            this.undo();
 
+        } else if (button.getText().equals("Redo")) { //User press redo button
+            this.redo();
 
         }
     }

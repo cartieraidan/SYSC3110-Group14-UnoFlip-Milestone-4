@@ -159,6 +159,24 @@ public class UnoView extends JFrame {
     }
 
     /**
+     * Update undo button to enabled or not.
+     *
+     * @param state Sets if enabled or not.
+     */
+    public void updateUndoButton(Boolean state) {
+        undo.setEnabled(state);
+    }
+
+    /**
+     * Update redo button to enabled or not.
+     *
+     * @param state Sets if enabled or not.
+     */
+    public void updateRedoButton(Boolean state) {
+        redo.setEnabled(state);
+    }
+
+    /**
      * Updates the banner for player name.
      *
      * @param name String name of character.
@@ -189,6 +207,12 @@ public class UnoView extends JFrame {
         repaint();
     }
 
+    /**
+     * For adding round and Game count to the player view.
+     *
+     * @param round int of which round it is.
+     * @param game int of which game it is.
+     */
     public void addGameStats(int round, int game) {
         JLabel roundLabel = new JLabel("Round: " + round);
         JLabel gameLabel = new JLabel("Game: " + game);
