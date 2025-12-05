@@ -99,8 +99,8 @@ public class Controller implements MouseListener, MouseMotionListener, ActionLis
             Snapshot prev = undoStack.pop();
             gameManager = prev.getGameManagerCopy();
             gameManager.setView(view); //reattach GUI
+            gameManager.updateControls(); //update play and draw so not null
             gameManager.updateAll(); //update GUI
-            //gameManager.displayHand(); //update GUI
 
             this.updateStackButtons(); //updates view of buttons
 
@@ -120,8 +120,8 @@ public class Controller implements MouseListener, MouseMotionListener, ActionLis
             Snapshot prev = redoStack.pop();
             gameManager = prev.getGameManagerCopy();
             gameManager.setView(view); //reattach GUI
+            gameManager.updateControls(); //update play and draw so not null
             gameManager.updateAll(); //update GUI
-            //gameManager.displayHand(); //update GUI
 
             this.updateStackButtons(); //updates view of buttons
 
