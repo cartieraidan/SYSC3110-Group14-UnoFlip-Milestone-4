@@ -55,53 +55,6 @@ public class GameManager implements Serializable {
         initialGame(); //getting players
     }
 
-    /**
-     * Returns a deep copy of deck to be used in a snapshot.
-     * @return the copied GameManager
-     */
-    public GameManager deepCopy(){
-
-        //create new players list
-        List<Player> playersCopy = new ArrayList<>();
-        for (Player p : this.players) {
-            playersCopy.add(p.deepCopy()); //deep copy each player
-        }
-
-        GameManager copy = new GameManager(playersCopy);
-
-        //copy the deck manually as deck is final
-        copy.deck.newDeck(); //reset deck first
-        copy.deck.getCards().clear(); // remove default cards
-        for (Card c : this.deck.getCards()) {
-            copy.deck.getCards().add(c.deepCopy()); //deep copy of each card
-        }
-
-        //copy discard pile
-        copy.discardPile.clear();
-        for (Card c : this.discardPile) {
-            copy.discardPile.push(c.deepCopy()); //deep copy of each card
-        }
-
-        //copy other fields
-        copy.currentPlayerIndex = this.currentPlayerIndex;
-        copy.direction = this.direction;
-        copy.drawCard = this.drawCard;
-        copy.wildDraw = this.wildDraw;
-        copy.wildDrawColour = this.wildDrawColour;
-        copy.sequence = this.sequence;
-        copy.roundCounter = this.roundCounter;
-        copy.gameCounter = this.gameCounter;
-
-        // UI elements are left null
-        copy.view = null;
-        copy.play = null;
-        copy.draw = null;
-        copy.hoveredButton = null;
-        copy.selectedCard = null;
-        copy.prevCardZ.clear();
-
-        return copy;
-    }
     /* *************************************************************** */
     /* *************************************************************** */
     /* *************************************************************** */
@@ -186,6 +139,61 @@ public class GameManager implements Serializable {
             JOptionPane.showMessageDialog(null, "No playable cards. skipTurn()");
             nextTurn();
         }
+    }
+
+    /* *************************************************************** */
+    /* *************************************************************** */
+    /* *************************************************************** */
+    /* *************************************************************** */
+    /* *************************************************************** */
+    //Milestone 4 implementation
+
+    /**
+     * Returns a deep copy of deck to be used in a snapshot.
+     * @return the copied GameManager
+     */
+    public GameManager deepCopy() {
+
+        //create new players list
+        List<Player> playersCopy = new ArrayList<>();
+        for (Player p : this.players) {
+            playersCopy.add(p.deepCopy()); //deep copy each player
+        }
+
+        GameManager copy = new GameManager(playersCopy);
+
+        //copy the deck manually as deck is final
+        copy.deck.newDeck(); //reset deck first
+        copy.deck.getCards().clear(); // remove default cards
+        for (Card c : this.deck.getCards()) {
+            copy.deck.getCards().add(c.deepCopy()); //deep copy of each card
+        }
+
+        //copy discard pile
+        copy.discardPile.clear();
+        for (Card c : this.discardPile) {
+            copy.discardPile.push(c.deepCopy()); //deep copy of each card
+        }
+
+        //copy other fields
+        copy.currentPlayerIndex = this.currentPlayerIndex;
+        copy.direction = this.direction;
+        copy.drawCard = this.drawCard;
+        copy.wildDraw = this.wildDraw;
+        copy.wildDrawColour = this.wildDrawColour;
+        copy.sequence = this.sequence;
+        copy.roundCounter = this.roundCounter;
+        copy.gameCounter = this.gameCounter;
+
+        // UI elements are left null
+        copy.view = null;
+        copy.play = null;
+        copy.draw = null;
+        copy.hoveredButton = null;
+        copy.selectedCard = null;
+        copy.prevCardZ.clear();
+
+        return copy;
     }
 
     /* *************************************************************** */
@@ -516,7 +524,6 @@ public class GameManager implements Serializable {
                 getCurrentPlayer().drawCard(getDeck());
                 nextTurn();
             } else if (card.getType() == CardType.WILD_DRAW_COLOR) {
-                /* ********implement user and AI version here for draw colour*********** */
                 //Extra logic for draw color card
                 skipTurn(1);
 
@@ -882,7 +889,6 @@ public class GameManager implements Serializable {
             p.resetScore();
         }
 
-        // <!----------- also here reset the round count as well for UI view ------------!>
     }
 
     /**
@@ -900,7 +906,7 @@ public class GameManager implements Serializable {
                 resetPlayerScores();
 
                 gameCounter++; //new game so increment
-                roundCounter = 0; //restart round coounter
+                roundCounter = 0; //restart round counter
 
             } else { //no option
                 JOptionPane.showMessageDialog(null, "Game Over");
