@@ -258,7 +258,7 @@ public class GameManager implements Serializable {
 
         updateAll();
 
-        setGameState(GameState.HANDLE_INITIAL_HAND); //saving game snapshot
+        //setGameState(GameState.HANDLE_INITIAL_HAND); //saving game snapshot
         handleInitialHand(); //for start of players hand
     }
 
