@@ -189,12 +189,7 @@ public class GameManager {
                 p.drawCard(deck);
             }
         }
-
-        //testing
-        for (Player p : players) {
-            p.addCardtoHand(new Card(CardColour.WILD, CardColour.WILD, CardType.WILD_DRAW_TWO, CardType.WILD_DRAW_COLOR, 50, 60));
-            p.addCardtoHand(new Card(CardColour.RED, CardColour.BROWN, CardType.FLIP, CardType.FLIP, 20, 20));
-        }
+        
 
     }
 
