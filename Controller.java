@@ -38,6 +38,7 @@ public class Controller implements MouseListener, MouseMotionListener, ActionLis
         gameManager.setView(view);
         gameManager.setListener(this);
         gameManager.initializeControls();
+        gameManager.initialPlayers();
         view.subscribe(gameManager);
 
         gameManager.setGameState(GameState.NEW_ROUND); //saving initial game snapshot

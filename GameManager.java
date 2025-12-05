@@ -54,7 +54,7 @@ public class GameManager implements Serializable {
         this.direction = 1;
         prevCardZ = new HashMap<>();
 
-        initialGame(); //getting players
+        //initialPlayers(); //getting players
     }
 
     /* *************************************************************** */
@@ -67,7 +67,7 @@ public class GameManager implements Serializable {
     /**
      * Methods that initializes all players for the game.
      */
-    private void initialGame() {
+    public void initialPlayers() {
 
         if (!gameStarted) { //
             //get number of players and if they're AI or not
