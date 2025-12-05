@@ -12,7 +12,7 @@ import java.util.Stack;
  * @author Aidan Cartier, Mark Bowerman
  * @version December 5, 2025
  */
-public class Controller implements MouseListener, MouseMotionListener, ActionListener {
+public class Controller implements MouseListener, MouseMotionListener, ActionListener, StateListener {
 
     private UnoView view;
     private ArrayList<Player> players;
@@ -36,8 +36,11 @@ public class Controller implements MouseListener, MouseMotionListener, ActionLis
         //setup game
         gameManager = new GameManager(players);
         gameManager.setView(view);
+        gameManager.setListener(this);
         gameManager.initializeControls();
         view.subscribe(gameManager);
+
+        gameManager.setGameState(GameState.NEW_ROUND); //saving initial game snapshot
         gameManager.startGame();
 
         view.setVisible(true);
@@ -49,9 +52,11 @@ public class Controller implements MouseListener, MouseMotionListener, ActionLis
 
     /**
      * Push a snapshot to the undo stack. Should be called before any player action that changes the game.
+     * Interface implementation for StateListener, called everything state change.
      */
-    private void saveSnapshotForUndo(){
-        undoStack.push(new Snapshot(gameManager)); //create copy and add to stack
+    @Override
+    public void saveSnapshotForUndo(GameState state) {
+        undoStack.push(new Snapshot(gameManager, state)); //create copy and add to stack
         redoStack.clear(); //clear redo when a new move is made
     }
 
@@ -61,7 +66,7 @@ public class Controller implements MouseListener, MouseMotionListener, ActionLis
      */
     public void undo(){
         if(!undoStack.isEmpty()){
-            redoStack.push(new Snapshot(gameManager)); //save current state for redo
+            redoStack.push(new Snapshot(gameManager, gameManager.getGameState())); //save current state for redo
             Snapshot prev = undoStack.pop();
             gameManager = prev.getGameManagerCopy();
             gameManager.setView(view); //reattach GUI
@@ -76,7 +81,7 @@ public class Controller implements MouseListener, MouseMotionListener, ActionLis
      */
     public void redo(){
         if(!redoStack.isEmpty()){
-            undoStack.push(new Snapshot(gameManager)); //save current state for undo
+            undoStack.push(new Snapshot(gameManager, gameManager.getGameState())); //save current state for undo
             Snapshot prev = redoStack.pop();
             gameManager = prev.getGameManagerCopy();
             gameManager.setView(view); //reattach GUI
@@ -96,7 +101,7 @@ public class Controller implements MouseListener, MouseMotionListener, ActionLis
             saveDir.mkdir();
         }
 
-        Snapshot snap = new Snapshot(gameManager);
+        Snapshot snap = new Snapshot(gameManager,  gameManager.getGameState());
         try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("saves/" + filename))){
             out.writeObject(snap);
         } catch(IOException e){
@@ -258,8 +263,6 @@ public class Controller implements MouseListener, MouseMotionListener, ActionLis
 
 
 
-            System.out.println("updateView() called by: " + gameManager.getCurrentPlayer().getName() + " in Controller draw; state: " + gameManager.getSeq());
-            //gameManager.updateView();
         }
     }
 

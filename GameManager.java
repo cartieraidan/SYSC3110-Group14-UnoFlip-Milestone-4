@@ -35,6 +35,8 @@ public class GameManager implements Serializable {
     private int sequence = 0; //for debugging
     private int roundCounter = 0;
     private int gameCounter = 1;
+    private GameState gameState;
+    private StateListener stateListener;
 
     //all new variables for new code
     private boolean gameStarted = false;
@@ -79,7 +81,9 @@ public class GameManager implements Serializable {
     /**
      * Logic for sequence 2, player start of turn, what can they do?
      */
-    private void handleInitialHand() {
+    public void handleInitialHand() {
+        setGameState(GameState.HANDLE_INITIAL_HAND); //saving game snapshot
+
         Player player = getCurrentPlayer();
 
         if (canPlay() && player instanceof AiPlayer) {
@@ -122,6 +126,8 @@ public class GameManager implements Serializable {
      * Logic for sequence 5, drawing a card then what?
      */
     public void handleAfterDraw() {
+        setGameState(GameState.HANDLE_AFTER_DRAW); //saving game snapshot
+
         displayHand(); //updates player UI hand
         Player player = getCurrentPlayer();
 
@@ -194,6 +200,35 @@ public class GameManager implements Serializable {
         copy.prevCardZ.clear();
 
         return copy;
+    }
+
+    /**
+     * Set the current state of the game for Snapshot and notifies the listener to save a Snapshot
+     * to undo stack.
+     *
+     * @param state Current state.
+     */
+    public void setGameState(GameState state) {
+        this.gameState = state;
+        stateListener.saveSnapshotForUndo(state); //calls to save a snapshot
+    }
+
+    /**
+     * Get the current state of the game.
+     *
+     * @return Enum for what logic to handle.
+     */
+    public GameState getGameState() {
+        return this.gameState;
+    }
+
+    /**
+     * Sets Controller as listener for state changes whenever a new state occurs
+     *
+     * @param stateListener Interface for Controller
+     */
+    public void setListener(StateListener stateListener) {
+        this.stateListener = stateListener;
     }
 
     /* *************************************************************** */
@@ -892,10 +927,11 @@ public class GameManager implements Serializable {
     }
 
     /**
-     * Handles resetting everything needed to restart a new round.
+     * Handles resetting everything needed to restart a new round and ask player if they wish to start a new game
+     * after exceeding points.
      */
     private void restartGame() {
-        if(getRoundWinner().getScore() >= 50) {
+        if(getRoundWinner().getScore() >= 500) {
 
             Object[] options = {"YES", "NO"};
             JPanel endPrompt = new JPanel();
@@ -925,6 +961,8 @@ public class GameManager implements Serializable {
         for (Player player : getPlayers()) {
             player.clearHand();
         }
+
+        setGameState(GameState.NEW_ROUND); //saving snapshot before new round starts
 
         startGame();
         System.out.println("updateView() called by: " + getCurrentPlayer().getName() + " in restartGame(); state: " + getSeq());
