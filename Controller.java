@@ -71,6 +71,8 @@ public class Controller implements MouseListener, MouseMotionListener, ActionLis
             gameManager = prev.getGameManagerCopy();
             gameManager.setView(view); //reattach GUI
             gameManager.displayHand(); //update GUI
+
+            prev.executeState(); //executes game logic
         }
         //should probably add an else in case there is nothing to undo
     }
@@ -86,6 +88,8 @@ public class Controller implements MouseListener, MouseMotionListener, ActionLis
             gameManager = prev.getGameManagerCopy();
             gameManager.setView(view); //reattach GUI
             gameManager.displayHand(); //update GUI
+
+            prev.executeState(); //executes game logic
         }
         //should probably add an else in case there is nothing to redo
     }
@@ -123,6 +127,8 @@ public class Controller implements MouseListener, MouseMotionListener, ActionLis
             //clear stacks after loading
             undoStack.clear();
             redoStack.clear();
+
+            snap.executeState(); //executes game logic
 
         } catch (IOException | ClassNotFoundException e){
             e.printStackTrace();
