@@ -16,7 +16,7 @@ public class GameManagerTest {
 
     @Test
     void testStartGameDealsHands(){
-        gm.startgame();
+        gm.startGame();
         for (Player p: gm.getPlayers()){
             assertEquals(7, p.gethand().size(), "Each player should start with 7 cards.");
         }
@@ -34,14 +34,14 @@ public class GameManagerTest {
 
     @Test
     void testCheckEmptyHandTrue() {
-        gm.startgame();
+        gm.startGame();
         p1.clearHand();
         assertTrue(gm.checkEmptyHand());
     }
 
     @Test
     void testGetRoundWinner() {
-        gm.startgame();
+        gm.startGame();
         p2.clearHand();
         assertEquals(p2, gm.getRoundWinner());
     }

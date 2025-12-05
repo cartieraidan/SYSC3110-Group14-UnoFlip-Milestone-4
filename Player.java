@@ -96,7 +96,7 @@ public class Player {
      *
      * @param points the number of points to be added to the players score
      */
-    public void addScore(int points){
+    public void addScore(int points) {
         score += points;
     }
 
@@ -107,12 +107,20 @@ public class Player {
     public int getScore() {
         return score;
     }
+
+    /**
+     * Reset player score after game.
+     */
+    public void resetScore() {
+        score = 0;
+    }
+
     /**
      * Returns the players hand.
      *
      * @return the players hand
      */
-    public List<Card> gethand(){
+    public List<Card> gethand() {
         return hand;
     }
 
@@ -121,7 +129,7 @@ public class Player {
      *
      * @return the point value fo the players hand
      */
-    public int gethandValue(){
+    public int gethandValue() {
         int value = 0;
         for (Card i : hand) {
             value += i.getValue();

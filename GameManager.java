@@ -189,7 +189,7 @@ public class GameManager {
                 p.drawCard(deck);
             }
         }
-        
+
 
     }
 
@@ -821,12 +821,34 @@ public class GameManager {
     }
 
     /**
+     * Reset all player scores.
+     */
+    private void resetPlayerScores() {
+        for (Player p : players) {
+            p.resetScore();
+        }
+
+        // <!----------- also here reset the round count as well for UI view ------------!>
+    }
+
+    /**
      * Handles resetting everything needed to restart a new round.
      */
     private void restartGame() {
         if(getRoundWinner().getScore() >= 500) {
-            JOptionPane.showMessageDialog(null, "Game Over");
-            System.exit(0);
+
+            Object[] options = {"YES", "NO"};
+            JPanel endPrompt = new JPanel();
+            endPrompt.add(new JLabel("Do you wish to start a new Game?"));
+
+            int result = JOptionPane.showOptionDialog(null, endPrompt, "Game System Administrator", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, null);
+            if (result == JOptionPane.YES_OPTION) {
+                resetPlayerScores();
+
+            } else { //no option
+                JOptionPane.showMessageDialog(null, "Game Over");
+                System.exit(0);
+            }
         }
 
         //refresh deck

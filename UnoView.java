@@ -2,7 +2,7 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class UnoView extends JFrame implements Interface {
+public class UnoView extends JFrame {
 
     private JPanel playerCards;
     private JPanel topPanel;
