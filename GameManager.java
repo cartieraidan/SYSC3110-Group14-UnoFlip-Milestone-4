@@ -310,9 +310,7 @@ public class GameManager implements Serializable {
     public void initializeControls() {
         view.addControlButtons();
 
-        play = view.getPlayButton();
-
-        draw = view.getDrawButton();
+        updateControls(); //updates play and draw
 
         view.repaint();
     }

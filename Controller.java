@@ -12,7 +12,7 @@ import java.util.Stack;
  * @author Aidan Cartier, Mark Bowerman
  * @version December 5, 2025
  */
-public class Controller implements MouseListener, MouseMotionListener, ActionListener, StateListener {
+public class Controller implements MouseListener, MouseMotionListener, ActionListener, StateListener, Serializable {
 
     private UnoView view;
     private ArrayList<Player> players;
@@ -159,8 +159,8 @@ public class Controller implements MouseListener, MouseMotionListener, ActionLis
             Snapshot snap = (Snapshot) in.readObject();
             gameManager = snap.getGameManagerCopy();
             gameManager.setView(view); //reattach GUI
+            gameManager.updateControls(); //update play and draw so not null
             gameManager.updateAll(); //update GUI
-            //gameManager.displayHand(); //update GUI
 
             //clear stacks after loading
             undoStack.clear();
@@ -316,6 +316,11 @@ public class Controller implements MouseListener, MouseMotionListener, ActionLis
             System.out.println("redo called");
             this.redo();
 
+        } else if (button.getText().equals("Save Game")) {
+            String filename = JOptionPane.showInputDialog("Input file name to be saved: ");
+            if (filename != null) {
+                saveGame(filename);
+            }
         }
     }
 

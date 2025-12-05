@@ -18,6 +18,7 @@ public class UnoView extends JFrame {
     private JButton draw;
     private JButton undo;
     private JButton redo;
+    private JButton save;
 
     GameManager gameManager;
     Controller controller;
@@ -97,6 +98,10 @@ public class UnoView extends JFrame {
         redo.addActionListener(controller);
         redo.setEnabled(false);
         panel.add(redo);
+
+        save = new JButton("Save Game");
+        save.addActionListener(controller);
+        panel.add(save);
     }
 
     /**
