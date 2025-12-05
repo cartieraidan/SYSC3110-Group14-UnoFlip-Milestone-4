@@ -32,6 +32,8 @@ public class GameManager {
     private JButton draw;
 
     private int sequence = 0; //for debugging
+    private int roundCounter = 0;
+    private int gameCounter = 1;
 
     //all new variables for new code
     private boolean gameStarted = false;
@@ -623,6 +625,7 @@ public class GameManager {
         String name = getCurrentPlayer().getName(); //gets current player name
         view.currentPlayerDisplay(name);
         view.addUpdateScore(getCurrentPlayer().getScore());
+        view.addGameStats(roundCounter, gameCounter); //for round and game out for player to see
     }
 
 
@@ -795,10 +798,13 @@ public class GameManager {
     public boolean checkWinner() {
 
         if (checkEmptyHand()) { //verifies if a player has an empty hand
+            roundCounter++; //round over so increment
             updatePlayerScore();
 
             JOptionPane.showMessageDialog(null, "Game Over " + getRoundWinner().getName() + " Won");
             restartGame();
+
+
 
             return true;
         }
@@ -835,7 +841,7 @@ public class GameManager {
      * Handles resetting everything needed to restart a new round.
      */
     private void restartGame() {
-        if(getRoundWinner().getScore() >= 500) {
+        if(getRoundWinner().getScore() >= 50) {
 
             Object[] options = {"YES", "NO"};
             JPanel endPrompt = new JPanel();
@@ -844,6 +850,9 @@ public class GameManager {
             int result = JOptionPane.showOptionDialog(null, endPrompt, "Game System Administrator", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, null);
             if (result == JOptionPane.YES_OPTION) {
                 resetPlayerScores();
+
+                gameCounter++; //new game so increment
+                roundCounter = 0; //restart round coounter
 
             } else { //no option
                 JOptionPane.showMessageDialog(null, "Game Over");

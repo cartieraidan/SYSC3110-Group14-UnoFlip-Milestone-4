@@ -1,4 +1,5 @@
 
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -12,7 +13,6 @@ public class UnoView extends JFrame {
     private JPanel centerPanel;
 
     private JPanel player2;
-
 
     private JButton play;
     private JButton draw;
@@ -45,7 +45,7 @@ public class UnoView extends JFrame {
         centerPanel.setPreferredSize(new Dimension(400, 400));
         add(centerPanel, BorderLayout.CENTER);
 
-        leftPanel = new JPanel();
+        leftPanel = new JPanel(new GridLayout(2, 2)); //first row is player name and score, second round and game
         rightPanel = new JPanel();
 
         topPanel.add(leftPanel);
@@ -171,6 +171,18 @@ public class UnoView extends JFrame {
         scoreLabel.setForeground(Color.black);
 
         leftPanel.add(scoreLabel);
+
+        repaint();
+    }
+
+    public void addGameStats(int round, int game) {
+        JLabel roundLabel = new JLabel("Round: " + round);
+        JLabel gameLabel = new JLabel("Game: " + game);
+        roundLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        gameLabel.setFont(new Font("Arial", Font.BOLD, 14));
+
+        leftPanel.add(roundLabel);
+        leftPanel.add(gameLabel);
 
         repaint();
     }
