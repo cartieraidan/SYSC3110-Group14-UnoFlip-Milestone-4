@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  * @author Mark Bowerman
  * @version 1.0
  */
-public class Player {
+public class Player implements Serializable {
     private final String name;
     private final List<Card> hand;
     private int score;
@@ -25,6 +26,19 @@ public class Player {
         this.hand = new ArrayList<>();
         this.score = 0;
 
+    }
+
+    /**
+     * Returns a deep copy of player to be used in a snapshot.
+     * @return the copied player
+     */
+    public Player deepCopy(){
+        Player copy = new Player(this.name);
+        copy.score = this.score;
+        for (Card card : this.hand) { //copy over hand
+            copy.hand.add(card.deepCopy());
+        }
+        return copy;
     }
 
     /**

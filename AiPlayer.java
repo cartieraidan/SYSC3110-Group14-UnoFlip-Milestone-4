@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +12,7 @@ import java.util.Map;
  * @author Aidan Cartier
  * @version November 25, 2025
  */
-public class AiPlayer extends Player {
+public class AiPlayer extends Player implements Serializable {
 
     private ArrayList<JButton> uiHand;
     private ArrayList<Integer> playableCards;
@@ -36,6 +37,20 @@ public class AiPlayer extends Player {
         this("AI Player");
     }
 
+    /**
+     * Returns a deep copy of AiPlayer to be used in a snapshot.
+     * uiHand is not copied as it should be recreated when the ui updates.
+     * playableCards can also be recalculated.
+     * @return the copied AiPlayer
+     */
+    public AiPlayer deepCopy(){
+        AiPlayer copy = new AiPlayer(this.getName());
+        for (Card card : this.gethand()) {
+            copy.gethand().add(card.deepCopy());
+        }
+        copy.bestCard = this.bestCard;
+        return copy;
+    }
     /**
      * updateUIHand() must be called before this function in order
      * to get an update AI hand of all cards playable.

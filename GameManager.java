@@ -1,6 +1,7 @@
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.io.Serializable;
 import java.util.*;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * @author Aidan Cartier
  * @version November 29, 2025
  */
-public class GameManager {
+public class GameManager implements Serializable {
     private final List<Player> players;
     private int playerCount;
     private final Deck deck;
@@ -54,6 +55,53 @@ public class GameManager {
         initialGame(); //getting players
     }
 
+    /**
+     * Returns a deep copy of deck to be used in a snapshot.
+     * @return the copied GameManager
+     */
+    public GameManager deepCopy(){
+
+        //create new players list
+        List<Player> playersCopy = new ArrayList<>();
+        for (Player p : this.players) {
+            playersCopy.add(p.deepCopy()); //deep copy each player
+        }
+
+        GameManager copy = new GameManager(playersCopy);
+
+        //copy the deck manually as deck is final
+        copy.deck.newDeck(); //reset deck first
+        copy.deck.getCards().clear(); // remove default cards
+        for (Card c : this.deck.getCards()) {
+            copy.deck.getCards().add(c.deepCopy()); //deep copy of each card
+        }
+
+        //copy discard pile
+        copy.discardPile.clear();
+        for (Card c : this.discardPile) {
+            copy.discardPile.push(c.deepCopy()); //deep copy of each card
+        }
+
+        //copy other fields
+        copy.currentPlayerIndex = this.currentPlayerIndex;
+        copy.direction = this.direction;
+        copy.drawCard = this.drawCard;
+        copy.wildDraw = this.wildDraw;
+        copy.wildDrawColour = this.wildDrawColour;
+        copy.sequence = this.sequence;
+        copy.roundCounter = this.roundCounter;
+        copy.gameCounter = this.gameCounter;
+
+        // UI elements are left null
+        copy.view = null;
+        copy.play = null;
+        copy.draw = null;
+        copy.hoveredButton = null;
+        copy.selectedCard = null;
+        copy.prevCardZ.clear();
+
+        return copy;
+    }
     /* *************************************************************** */
     /* *************************************************************** */
     /* *************************************************************** */

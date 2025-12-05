@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.Stack;
  * @author Joshua Heinze
  * @version 1.0
  */
-public class Deck {
+public class Deck implements Serializable {
     private final Stack<Card> cards;
 
     /**
@@ -19,6 +20,19 @@ public class Deck {
     public Deck(){
         this.cards = new Stack<>();
         initializeStandardUnoDeck();
+    }
+
+    /**
+     * Returns a deep copy of deck to be used in a snapshot.
+     * @return the copied deck
+     */
+    public Deck deepCopy(){
+        Deck copy = new Deck();
+        copy.cards.clear(); //remove cards added by constructor
+        for (Card card : this.cards) { //copy over cards from deck to copied deck
+            copy.cards.push(card.deepCopy());
+        }
+        return copy;
     }
 
     /**

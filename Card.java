@@ -1,3 +1,5 @@
+import java.io.Serializable;
+
 /**
  * Represents a single card in the Uno Flip game.
  * A card has a colour, a type, and if it is a number card, a value.
@@ -6,7 +8,7 @@
  * @author Mark Bowerman
  * @version 1.0
  */
-public class Card {
+public class Card implements Serializable {
     private CardColour lightColour;
     private CardColour darkColour;
     private CardType lightType;
@@ -34,6 +36,16 @@ public class Card {
         this.lightValue = lightValue;
         this.darkValue = darkValue;
         this.side = CardSide.LIGHT;
+    }
+
+    /**
+     * Returns a deep copy of card to be used in a snapshot.
+     * @return the copied card
+     */
+    public Card deepCopy() {
+        Card copy = new Card(lightColour, darkColour, lightType, darkType, lightValue, darkValue);
+        copy.side = this.side;
+        return copy;
     }
 
     /**
