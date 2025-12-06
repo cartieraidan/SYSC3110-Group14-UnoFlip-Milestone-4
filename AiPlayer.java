@@ -186,20 +186,4 @@ public class AiPlayer extends Player implements Serializable {
 
         return chosenColour;
     }
-
-    public void testHand() {
-        for (JButton button : uiHand) {
-            System.out.println(button.getText() + " and card object toString: " + gethand().get((Integer)button.getClientProperty("index")).toString());
-        }
-    }
-
-    public void testPlayableCards() {
-        for (int i : playableCards) {
-            System.out.println("playble cards: " + gethand().get(i).toString());
-        }
-    }
-
-    public void testBestCard() {
-        System.out.println("best card to play: " + gethand().get(playableCards.get(bestCard)).toString());
-    }
 }
