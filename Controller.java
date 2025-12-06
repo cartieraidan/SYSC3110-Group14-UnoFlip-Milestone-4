@@ -179,6 +179,7 @@ public class Controller implements MouseListener, MouseMotionListener, ActionLis
             undoStack.clear();
             redoStack.clear();
 
+            view.addControlButtons();
             this.updateStackButtons(); //updates view of buttons, might or might not need this....
 
             snap.executeState(); //executes game logic

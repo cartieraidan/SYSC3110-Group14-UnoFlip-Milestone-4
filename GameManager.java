@@ -196,8 +196,8 @@ public class GameManager implements Serializable {
 
         // UI elements are left null
         copy.view = null;
-        //copy.play = null;
-        //copy.draw = null;
+        copy.play = null;
+        copy.draw = null;
         copy.hoveredButton = null;
         copy.selectedCard = null;
         copy.prevCardZ.clear();
