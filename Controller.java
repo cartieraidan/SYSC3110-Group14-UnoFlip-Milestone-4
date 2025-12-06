@@ -60,8 +60,6 @@ public class Controller implements MouseListener, MouseMotionListener, ActionLis
         view.setVisible(true);
 
         gameOver = false;
-
-
     }
 
     /**

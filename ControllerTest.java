@@ -23,4 +23,12 @@ public class ControllerTest {
         controller.redo();
         assertEquals(undoPlayer, gameManager.getCurrentPlayer());
     }
+
+    @Test
+    void testSaveLoad() {
+        controller.saveGame("testSave");
+        Controller controller2 = new Controller();
+        controller2.loadGame("testSave");
+        assertEquals(gameManager.getCurrentPlayer().gethand(), controller2.getGameManager().getCurrentPlayer().gethand());
+    }
 }
