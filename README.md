@@ -44,7 +44,8 @@ Mark Bowerman
 - Class UML Diagram
   
 Joshua Heinze
-
+- Implemented test cases for save/load and undo/redo
+- Modified Controller to facilitate testing
 
 Lawrence Chen 
 
