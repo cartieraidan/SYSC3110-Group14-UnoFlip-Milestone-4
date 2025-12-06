@@ -39,8 +39,10 @@ Known Issues:
 Contributions:
 
 Mark Bowerman
-
-
+- Initial implementation of deepCopy() functions
+- Initial implementation of save/load and undo/redo
+- Class UML Diagram
+  
 Joshua Heinze
 
 
