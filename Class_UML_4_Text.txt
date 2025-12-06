@@ -1,0 +1,294 @@
+@startuml
+class GameManager{
+- players: List<Player>
+- playerCount: int
+- deck: Deck
+- discardPile: Stack<Card>
+- currentPlayerIndex: int
+- direction: int
+- view: UnoView
+- drawCard: boolean
+
+- prevCardZ: Map<JButton, Integer>
+- wildDraw: boolean
+- wildDrawColour: CardColour
+
+- hoveredButton: JButton
+- selectedCard: JButton
+- play: JButton
+- draw: JButton
+- sequence: int
+- roundCounter: int
+- gameCounter: int
+- gameState: GameState
+- stateListener: StateListener
+
+- gameStarted: boolean
+
++ GameManager(players: List<Player>)
+
++ initalPlayers(): void
++ handleInitialHand(): void
++ aiPlay(player: Player):void
++ handleAfterDraw(): void
++ deepCopy(): GameManager
++ updateControls(): void
++ setGameState(state: GameState): void
++ getGameState(): GameState
++ setListener(stateListener: StateListener): void
++ equals(other: Object): boolean
++ startGame(): void
++ initializeControls(): void
+- dealInitialHands(): void
++ setView(view UnoView): void
+- getPlayerSettings(): void
+- getNumberPlayers(): void
+- canPlay(): boolean
++ setPlauButton(bool: boolean): void
++ pushToDiscardPile(card Card): void
++ playCard(): void
+- handleFlipCard(cardHanded: Card): void
++ checkValidMove(card Card): boolean
+- handleActionCard(card Card): void
++ handleWildCard(card Card):void
+- handleAiDrawColour():void
++ getWildDrawLoop(): boolean
++ setWildDrawLoop(bool: boolean): void
++ getDrawLoopColour(): CardColour
++ skipTurn(skip: int): void
++ nextTurn(): void
+- resetVars():void
+- updateDiscardPile(): void
+- updateCurrentPlayer(): void
++ setButtonBool(bool: boolean): void
++ drawCard(): void
++ getCurrentPlayer(): Player
++ topDiscard(): Card
++ getPlayers(): List<Player>
++ getDeck(): Deck
++ getDiscardPile(): Stack<Card>
++ get CurrentPlayerIndex(): int
+- getPLayerCards(): JPanel
++ getSeq(): int
++ updateAll(): void
++ getRoundWinner(): Player
++ updatePlayerScore(): void
++ checkWinner(): boolean
++ checkEmptyHand(): boolean
+- resetPlayerScores(): void
+- restartGame(): void
++ displayHand(): void
+- setCardStyle(buttonCard: JButton, card: Card): void
++ addButtonZ(button: JButton, z: int): void
++ handleHover(buttonCard: JButton): void
++ resetHover(): void
++ handleCardPressed(button: JButton):void
+- playableCard(selectedCard: JButton): void
+}
+
+class Player{
+- name: String
+- hand: List<Card>
+- score: int
+
++ Player(name: String)
++ deepCopy(): Player
++ getName(deck: Deck): String
++ drawCard(Deck): void
++ addCardtoHand(card: Card): void
++ playCard(index: int): Card
++ flipHand(): void
++ clearHand(): void
++ addScore(points: int): void
++ getScore(): int
++ resetScore(): void
++ getHand(): List<Card>
++ getHandvalue(): int
++ hasPlayableCard(topCard: Card): boolean
++ toString(): String
+}
+
+class Card{
+- lightColour : CardColour
+- darkColour : CardColour 
+- lightType : CardType
+- darkType : CardType 
+- lightValue : int
+- darkvalue : int
+
++ Card(colour: CardColour, type: CardType, value: int)
++ deepCopy(): Card
++ flipCard(): void
++ getSide(): CardSide
++ getColour(): CardColour
++ setColour(colour: CardColour): void
++ getType(): CardType
++ getValue(): int
++ matches(other: Card): boolean
++ toString(): String
++ equals(obj: Object): boolean
+}
+
+class Deck{
+- cards Stack<Card>
+
++ Deck()
++ deepCopy(): Deck
++ newDeck():void
+- initializeStandardUnoDeck(): void
++ shuffle(): void
++ drawCard(): Card
++ peekCard(): Card
++ addCard(card: Card): void
++ isEmpty(): boolean
++ size(): int
++ addAll(moreCards: List<Cards>): void
++ getCards(): Stack<Card>
+}
+
+Class UnoView{
+- playerCards: JPanel
+- topPanel: JPanel
+- leftPanel: JPanel
+- rightPanel: JPanel
+- centerPanel: JPanel
+- player2: JPanel
+
+- play: JButton
+- draw: JButton
+- undo: JButton
+- redo: JButton
+- save: JButton
+
+gameManager: GameManager
+controller: Controller
+
++ UnoView()
++ addControlButtons(): void
++ addCenterCard(button:JButton): void
++ addPanel(panel: JPanel, layout: String): void
++getPlayerCards(): JPanel
++ getRightPanel(): JPanel
++getPlayButton(): JButton
++ getDrawButton(): JButton
++ updateUndoButton(state: Boolean): void
++ updateRedoButton(state: Boolean): void
++ currentPlayerDisplay(name: String): void
++ addUpdateScore(score: int): void
++ addGameStats(round: int, game: int): void
++ subscribe(gameManager: GameManager): void
++ setController(controller: Controller): void
++ addButtonCard(buttonCard: JButton): void
+
+}
+
+Class Snapshot{
+- gameManagerCopy: GameManager 
+-  gameStateCopy: GameState 
+
++ Snapshot(gm: GameManager, state: GameState)
++ executeState(): void
++ getGameState: GameState
++ getGameManagerCopy(): GameManager
+}
+
+class Controller{
+- view: UnoView
+- players: ArrayList<Player>
+- gameManager: GameManager
+- gameOver: boolean
+- undoStack: Stack<Snapshot>
+- redoStack: Stack<Snapshot>
+
++ Controller()
+- updateStackButtons(): void
+- checkState(snapshot: Snapshot): Boolean
++ getGameManager(): GameManager
++ saveSnapShotForUndo(state: GameState): void
++ draw(): void
++ undo(): void
++ redo(): void
++ saveGame(filename: String): void
++ loadGame(filename: String): void
++ getView(): UnoView
++ mouseExited(event: MouseEvent): void
++ mouseClicked(event: MouseEvent): void
++ mouseMoved(event: MouseEvent_: void
++ mousePressed(event: MouseEvent): void
++ mouseReleased(event: MouseEvent): void
++ mouseEntered(event: MouseEvent_: void
++ mouseDragged(event: MouseEvent_: void
++actionPerformed(event: ActionEvent): void
++ {static} main(args: String[]): void
+}
+
+class AiPlayer{
+- uiHand: ArrayList<JButton>
+- playableCards: ArrayList<Integer> playableCards
+- bestCard: int
+
++ AiPlayer(name: String)
++ AiPlayer()
++ deepCopy(): AiPlayer
++ tryToPlay(): JButton
++ updateUIHand(view: UnoView, card: Card): void
++ getBestCard(): Card
+- findBestCard(): void
+- playableCards(discardedCard: Card):void
++ getWildColour(): CardColour
+- calculateBestColour(): CardColour
+}
+
+interface MouseMotionListener
+interface MouseListener
+interface ActionListener
+interface StateListener
+interface Serializable
+interface StateListener{
+saveSnapshotForUndo(state GameState): void
+}
+
+enum CardColour{
+RED,BLUE, GREEN, YELLOW, WILD, BROWN, PURPLE, TEAL, ORANGE
+}
+
+enum CardType{
+NUMBER, REVERSE, SKIP, DRAW_ONE, WILD, WILD_DRAW_TWO, FLIP, DRAW_FIVE, SKIP_EVERYONE, WILD_DRAW_COLOR
+}
+
+enum CardSide{
+Light, Dark
+}
+
+enum GameState{
+HANDLE_INITIAL_HAND, HANDLE_AFTER_DRAW, NEW_ROUND
+{abstract} runState(engine: GameManager): void
+}
+
+Card *-- Deck
+Card o-- Player
+Player o-- GameManager
+AiPlayer o-- GameManager
+UnoView <-- GameManager
+UnoView <-- Controller
+GameManager <-- Controller
+CardColour <-- Card
+CardType <-- Card
+CardSide <-- Card
+Deck *-- GameManager
+GameState <-- Snapshot
+GameState <-- GameManager
+GameState <-- Controller
+Snapshot o-- Controller
+MouseListener <-- Controller
+MouseMotionListener <-- Controller
+ActionListener <-- Controller
+StateListener <-- Controller
+Serializable <-- Controller
+Serializable <-- Snapshot
+Serializable <-- AiPlayer
+Serializable <-- Deck
+Serializable <-- Player
+Serializable <-- GameManager
+Serializable <-- Card
+@enduml
