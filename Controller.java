@@ -33,16 +33,29 @@ public class Controller implements MouseListener, MouseMotionListener, ActionLis
         view.setController(this);
         players = new ArrayList<>();
 
-        //setup game
-        gameManager = new GameManager(players);
-        gameManager.setView(view);
-        gameManager.setListener(this);
-        gameManager.initializeControls();
-        gameManager.initialPlayers();
-        view.subscribe(gameManager);
+        Object[] options = {"YES", "NO"};
+        JPanel promptAi = new JPanel();
+        promptAi.add(new JLabel("Do you wish to load a save?"));
 
-        gameManager.startGame();
-        gameManager.setGameState(GameState.HANDLE_INITIAL_HAND); //saving initial game snapshot
+        int result = JOptionPane.showOptionDialog(null, promptAi, "Load Save", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, null);
+        if (result == JOptionPane.YES_OPTION) {
+
+            String filename = JOptionPane.showInputDialog(null, "Enter the name of the save file");
+            loadGame(filename);
+
+        } else {
+            //setup game
+            gameManager = new GameManager(players);
+            gameManager.setView(view);
+            gameManager.setListener(this);
+            gameManager.initializeControls();
+            gameManager.initialPlayers();
+            view.subscribe(gameManager);
+
+            gameManager.startGame();
+            gameManager.setGameState(GameState.HANDLE_INITIAL_HAND); //saving initial game snapshot
+
+        }
 
         view.setVisible(true);
 

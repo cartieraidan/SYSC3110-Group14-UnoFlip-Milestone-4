@@ -99,6 +99,7 @@ public class UnoView extends JFrame {
         redo.setEnabled(false);
         panel.add(redo);
 
+        //save JButton
         save = new JButton("Save Game");
         save.addActionListener(controller);
         panel.add(save);
