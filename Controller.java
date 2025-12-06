@@ -96,6 +96,41 @@ public class Controller implements MouseListener, MouseMotionListener, ActionLis
     }
 
     /**
+     * Draw a card.
+     */
+    public void draw() {
+        Player player = gameManager.getCurrentPlayer();
+
+        if (gameManager.getWildDrawLoop()) { //if player plays draw colour card
+            CardColour loopColour = gameManager.getDrawLoopColour(); //colour must draw
+
+            Deck deck = gameManager.getDeck(); //getting deck
+            Card drawCard = deck.drawCard(); //drawing card from deck
+
+            player.addCardtoHand(drawCard); //adding to player hand
+            if (drawCard.getColour() == loopColour) {
+                gameManager.setWildDrawLoop(false); //exit draw loop
+                gameManager.setPlayButton(true); //enable play card button
+                gameManager.setButtonBool(false); //disable draw button
+
+                System.out.println("player drew colour");
+            } else {
+                JOptionPane.showMessageDialog(null, "Keep drawing");
+            }
+
+            gameManager.displayHand(); //update view?
+
+        } else {
+            // Draw one card
+            gameManager.drawCard();
+            gameManager.setButtonBool(false); //disable draw for user after draw card
+            gameManager.setGameState(GameState.HANDLE_AFTER_DRAW); //saving game snapshot
+            gameManager.handleAfterDraw(); //continues game logic after draw card
+
+        }
+    }
+
+    /**
      * Undo a move. Saves the current game state to the redo stack and pops from undo stack. Then reattaches and updates
      * the GUI.
      */
@@ -292,35 +327,7 @@ public class Controller implements MouseListener, MouseMotionListener, ActionLis
 
         } else if (button.getText().equals("Draw")) { //draw card
             System.out.println("draw called by: " + gameManager.getCurrentPlayer().getName() + " state: " + gameManager.getSeq());
-            Player player = gameManager.getCurrentPlayer();
-
-            if (gameManager.getWildDrawLoop()) { //if player plays draw colour card
-                CardColour loopColour = gameManager.getDrawLoopColour(); //colour must draw
-
-                Deck deck = gameManager.getDeck(); //getting deck
-                Card drawCard = deck.drawCard(); //drawing card from deck
-
-                player.addCardtoHand(drawCard); //adding to player hand
-                if (drawCard.getColour() == loopColour) {
-                    gameManager.setWildDrawLoop(false); //exit draw loop
-                    gameManager.setPlayButton(true); //enable play card button
-                    gameManager.setButtonBool(false); //disable draw button
-
-                    System.out.println("player drew colour");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Keep drawing");
-                }
-
-                gameManager.displayHand(); //update view?
-
-            } else {
-                // Draw one card
-                gameManager.drawCard();
-                gameManager.setButtonBool(false); //disable draw for user after draw card
-                gameManager.setGameState(GameState.HANDLE_AFTER_DRAW); //saving game snapshot
-                gameManager.handleAfterDraw(); //continues game logic after draw card
-
-            }
+            this.draw();
 
         } else if (button.getText().equals("Undo")) { //User presses undo button
             System.out.println("undo called");
