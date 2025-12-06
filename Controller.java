@@ -84,6 +84,15 @@ public class Controller implements MouseListener, MouseMotionListener, ActionLis
     }
 
     /**
+     * Returns the game manager. FOR TEST PURPOSES ONLY
+     *
+     * @return the game manager.
+     */
+    public GameManager getGameManager() {
+        return gameManager;
+    }
+
+    /**
      * Push a snapshot to the undo stack. Should be called before any player action that changes the game.
      * Interface implementation for StateListener, called everything state change.
      */
